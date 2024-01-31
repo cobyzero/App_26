@@ -41,6 +41,7 @@ dependencies:
   get_it: ^7.6.7
   google_fonts: ^6.1.0
   easy_padding: ^0.1.7
+  animated_size_and_fade: ^4.0.0
 
 dev_dependencies:
   flutter_test:
