@@ -3,6 +3,7 @@ import 'package:app_26/Core/Static/texts.dart';
 import 'package:app_26/Features/Home/Infraestructure/Presentation/Widgets/home_memory_item.dart';
 import 'package:easy_padding/easy_padding.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -19,7 +20,9 @@ class HomeScreen extends StatelessWidget {
             color: Palette.white,
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          context.go("/questions");
+        },
         child: SizedBox(
           width: double.infinity,
           height: 5.h,

@@ -6,13 +6,16 @@ class MemoryTitle extends StatelessWidget {
     super.key,
     required this.child,
     this.padding = 20,
+    this.color,
   });
   final Widget child;
   final double padding;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
+      color: color,
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.circular(40),
       ),
