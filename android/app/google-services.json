@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "4516014037",
+    "project_id": "app-c8d37",
+    "storage_bucket": "app-c8d37.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4516014037:android:3dfa32ac78d76b8527bf5c",
+        "android_client_info": {
+          "package_name": "com.cobyzero.app_26.app_26"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG8x1TFS6-lgiLYDUtRsygPEnDVVt784M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
