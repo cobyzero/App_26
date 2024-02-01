@@ -1,3 +1,4 @@
+import 'package:app_26/Features/Auth/Infraestructure/Presentation/Screens/login_screen.dart';
 import 'package:app_26/Features/Home/Infraestructure/Presentation/Screens/home_screen.dart';
 import 'package:app_26/Features/Memory/Infraestructure/Presentation/Screens/memory_screen.dart';
 import 'package:app_26/Features/Questions/Infraestructure/Presentation/Screens/questions_screen.dart';
@@ -10,6 +11,10 @@ final goRouter = GoRouter(
     GoRoute(
       path: "/splash",
       builder: (context, state) => const SplashScreen(),
+    ),
+    GoRoute(
+      path: "/login",
+      builder: (context, state) => LoginScreen(),
     ),
     GoRoute(
       path: "/home",

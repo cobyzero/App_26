@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
       child: BlocListener<SplashBloc, SplashState>(
         listener: (context, state) {
           if (state is SplashComplete) {
-            context.go("/home");
+            context.go("/login");
           }
         },
         child: Scaffold(
