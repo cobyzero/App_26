@@ -1,5 +1,6 @@
 import 'package:app_26/Core/Static/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
 
 class Util {
@@ -46,6 +47,34 @@ class Util {
           ),
         );
       },
+    );
+  }
+
+  static void close(BuildContext context) {
+    GoRouter.of(context).pop();
+  }
+
+  static Widget loadingWidget() {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              width: 10.h,
+              height: 10.h,
+              child: const CircularProgressIndicator(
+                color: Palette.kPrimary,
+                strokeWidth: 8,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

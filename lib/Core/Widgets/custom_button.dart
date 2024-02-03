@@ -1,5 +1,4 @@
 import 'package:app_26/Core/Static/colors.dart';
-import 'package:app_26/Core/Static/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -18,7 +17,7 @@ class CustomButton extends StatelessWidget {
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
         fixedSize: Size(
-          100.w,
+          double.infinity,
           6.h,
         ),
         backgroundColor: Palette.kPrimary,

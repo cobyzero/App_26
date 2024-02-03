@@ -1,6 +1,11 @@
 import 'package:app_26/Core/Static/colors.dart';
 import 'package:app_26/Core/Static/texts.dart';
+import 'package:app_26/Core/Util/util.dart';
+import 'package:app_26/Features/Auth/Domain/Entities/user_entity.dart';
+import 'package:app_26/Features/Home/Application/bloc/home_bloc.dart';
+import 'package:app_26/Features/Home/Domain/Entities/memory_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
 
@@ -8,22 +13,45 @@ class HomeMemoryItem extends StatelessWidget {
   const HomeMemoryItem({
     super.key,
     required this.index,
-    required this.isLocked,
+    required this.memory,
+    required this.user,
   });
   final int index;
-  final bool isLocked;
+  final MemoryEntity memory;
+  final UserEntity user;
   @override
   Widget build(BuildContext context) {
     return FilledButton(
       onPressed: () {
-        if (isLocked) return;
-        context.go("/memory");
+        if (memory.isBlocked) {
+          if (user.keys == 0) {
+            Util.showMessage("No cuentas con llaves suficientes", context);
+            return;
+          }
+
+          context.read<HomeBloc>().add(
+                HomeEventUnlockMemory(
+                  memory.id,
+                  userId: user.id,
+                  keys: user.keys,
+                ),
+              );
+          return;
+        }
+        context.go("/memory", extra: memory);
       },
       style: FilledButton.styleFrom(
-        shape: const CircleBorder(),
-        backgroundColor: Palette.pink,
+        shape: const CircleBorder(
+          side: BorderSide(
+            width: 4,
+            color: Palette.grey,
+          ),
+        ),
+        elevation: 20,
+        shadowColor: Palette.kPrimary,
+        backgroundColor: Palette.kPrimary,
       ),
-      child: isLocked
+      child: memory.isBlocked
           ? Icon(
               Icons.lock,
               color: Colors.white,

@@ -16,13 +16,13 @@ final class LoginInitial extends LoginState {
 }
 
 final class LoginComplete extends LoginState {
-  final String id;
+  final Stream<UserEntity> user;
 
-  LoginComplete({required this.id});
+  LoginComplete({required this.user});
 
-  copyWith({String? id}) {
+  copyWith({Stream<UserEntity>? user}) {
     return LoginComplete(
-      id: id ?? this.id,
+      user: user ?? this.user,
     );
   }
 }

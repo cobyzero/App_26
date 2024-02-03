@@ -1,4 +1,5 @@
 import 'package:app_26/Features/Auth/Infraestructure/Presentation/Screens/login_screen.dart';
+import 'package:app_26/Features/Home/Domain/Entities/memory_entity.dart';
 import 'package:app_26/Features/Home/Infraestructure/Presentation/Screens/home_screen.dart';
 import 'package:app_26/Features/Memory/Infraestructure/Presentation/Screens/memory_screen.dart';
 import 'package:app_26/Features/Questions/Infraestructure/Presentation/Screens/questions_screen.dart';
@@ -22,11 +23,15 @@ final goRouter = GoRouter(
     ),
     GoRoute(
       path: "/memory",
-      builder: (context, state) => const MemoryScreen(),
+      builder: (context, state) => MemoryScreen(
+        entity: state.extra as MemoryEntity,
+      ),
     ),
     GoRoute(
       path: "/questions",
-      builder: (context, state) => const QuestionsScreen(),
+      builder: (context, state) => QuestionsScreen(
+        userId: state.extra as String,
+      ),
     ),
   ],
 );

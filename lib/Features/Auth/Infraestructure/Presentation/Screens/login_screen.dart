@@ -1,5 +1,6 @@
 import 'package:app_26/Core/Static/assets.dart';
 import 'package:app_26/Core/Static/colors.dart';
+import 'package:app_26/Core/Static/const.dart';
 import 'package:app_26/Core/Util/util.dart';
 import 'package:app_26/Core/Widgets/custom_input.dart';
 import 'package:app_26/Features/Auth/Application/bloc/login_bloc.dart';
@@ -20,7 +21,14 @@ class LoginScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is LoginComplete) {
           GoRouter.of(context).pop();
-          context.go("/home");
+
+          state.user.first.then((value) {
+            if (value.rol == Rol.admin.index) {
+              context.go("/homeAdmin");
+            } else if (value.rol == Rol.user.index) {
+              context.go("/home");
+            }
+          });
         } else if (state is LoginError) {
           GoRouter.of(context).pop();
           Util.showMessage(state.error, context);
@@ -64,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                             return Icon(
                               Icons.arrow_circle_right_outlined,
                               size: 20.sp,
-                              color: state.isEmpty ? Palette.grey2 : Palette.pink,
+                              color: state.isEmpty ? Palette.grey2 : Palette.kPrimary,
                             );
                           }
                           return const SizedBox.shrink();
