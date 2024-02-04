@@ -20,7 +20,7 @@ class Texts extends StatelessWidget {
   });
 
   final String text;
-  final double fontSize;
+  final double? fontSize;
   final TextAlign alignment;
   final FontWeight fontWeight;
   final bool underline;
@@ -35,7 +35,7 @@ class Texts extends StatelessWidget {
     super.key,
     required this.text,
     this.height = 1,
-    required this.fontSize,
+    this.fontSize,
     this.alignment = TextAlign.left,
     this.underline = false,
     this.color = Palette.black,
@@ -49,10 +49,10 @@ class Texts extends StatelessWidget {
     super.key,
     required this.text,
     this.height = 1,
-    required this.fontSize,
+    this.fontSize,
     this.alignment = TextAlign.left,
     this.underline = false,
-    this.color = Palette.grey,
+    this.color = Palette.grey3,
     this.maxLines = 30,
     this.textOverflow = TextOverflow.clip,
     this.padding,
@@ -63,10 +63,10 @@ class Texts extends StatelessWidget {
     super.key,
     required this.text,
     this.height = 1,
-    required this.fontSize,
+    this.fontSize,
     this.alignment = TextAlign.left,
     this.underline = false,
-    this.color = Palette.black,
+    this.color = Palette.grey3,
     this.maxLines = 30,
     this.textOverflow = TextOverflow.clip,
     this.padding,
@@ -82,7 +82,7 @@ class Texts extends StatelessWidget {
         textAlign: alignment,
         style: (style ?? GoogleFonts.inter()).copyWith(
           color: color,
-          fontSize: fontSize.sp,
+          fontSize: fontSize ?? 12.sp,
           height: height,
           fontWeight: fontWeight,
           fontFamily: "Inter",

@@ -1,8 +1,8 @@
 import 'package:app_26/Core/Static/colors.dart';
 import 'package:flutter/material.dart';
 
-class CustomInput extends StatelessWidget {
-  const CustomInput({
+class CustomInputField extends StatelessWidget {
+  const CustomInputField({
     super.key,
     required this.controller,
     required this.hintText,
@@ -21,6 +21,7 @@ class CustomInput extends StatelessWidget {
       onChanged: onChanged,
       controller: controller,
       validator: validator,
+      maxLines: 10,
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
         hintText: hintText,

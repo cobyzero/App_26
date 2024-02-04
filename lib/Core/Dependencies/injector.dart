@@ -4,6 +4,10 @@ import 'package:app_26/Features/Auth/Domain/Repositories/auth_repository.dart';
 import 'package:app_26/Features/Home/Application/IRepositories/home_repository.dart';
 import 'package:app_26/Features/Home/Application/Services/home_services.dart';
 import 'package:app_26/Features/Home/Domain/Repositories/home_repository.dart';
+import 'package:app_26/Features/Memory/Application/Blocs/memory_create_bloc/memory_create_bloc.dart';
+import 'package:app_26/Features/Memory/Application/Repositories/memory_repository.dart';
+import 'package:app_26/Features/Memory/Application/Services/memory_service.dart';
+import 'package:app_26/Features/Memory/Domain/Repositories/memory_repository.dart';
 import 'package:app_26/Features/Questions/Application/IRepositories/questions_repository.dart';
 import 'package:app_26/Features/Questions/Application/Services/questions_service.dart';
 import 'package:app_26/Features/Questions/Domain/Repositories/questions_repository.dart';
@@ -23,6 +27,9 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton<QuestionService>(
     () => QuestionService(),
   );
+  getIt.registerLazySingleton<MemoryService>(
+    () => MemoryService(),
+  );
   //REPOSITORIES
   getIt.registerLazySingleton<AuthRepository>(
     () => IAuthRepository(
@@ -39,8 +46,18 @@ Future<void> initDependencies() async {
       getIt.get<QuestionService>(),
     ),
   );
+  getIt.registerLazySingleton<MemoryRepository>(
+    () => IMemoryRepository(
+      getIt.get<MemoryService>(),
+    ),
+  );
   //BLOCS
   getIt.registerLazySingleton<SplashBloc>(
     () => SplashBloc(),
+  );
+  getIt.registerLazySingleton<MemoryCreateBloc>(
+    () => MemoryCreateBloc(
+      getIt.get<MemoryRepository>(),
+    ),
   );
 }

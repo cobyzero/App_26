@@ -10,15 +10,6 @@ class Util {
       backgroundColor: Palette.kPrimary,
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.all(3.w),
-      elevation: 30,
-      action: SnackBarAction(
-        label: 'Cerrar',
-        disabledTextColor: Colors.white,
-        textColor: Colors.yellow,
-        onPressed: () {
-          ScaffoldMessenger.of(context).clearSnackBars();
-        },
-      ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -76,5 +67,9 @@ class Util {
         ),
       ),
     );
+  }
+
+  static String formatDate(DateTime date) {
+    return "${date.day}/${date.month}/${date.year}";
   }
 }

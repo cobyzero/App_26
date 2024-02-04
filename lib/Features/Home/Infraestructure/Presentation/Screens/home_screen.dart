@@ -38,9 +38,8 @@ class HomeScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Texts.bold(
+                          const Texts.bold(
                             text: "Obtener llaves",
-                            fontSize: 6.sp,
                             color: Palette.white,
                           ).only(right: 10),
                           const Icon(
@@ -91,7 +90,6 @@ class HomeScreen extends StatelessWidget {
                               children: [
                                 Texts.bold(
                                   text: "Hola ${snapshotUser.data!.name}!",
-                                  fontSize: 8.sp,
                                   alignment: TextAlign.center,
                                   color: Palette.grey,
                                 ),
@@ -103,7 +101,6 @@ class HomeScreen extends StatelessWidget {
                                     ).only(right: 10),
                                     Texts.bold(
                                       text: snapshotUser.data!.keys.toString(),
-                                      fontSize: 6.sp,
                                       alignment: TextAlign.center,
                                       color: Palette.grey,
                                     ),
@@ -113,7 +110,7 @@ class HomeScreen extends StatelessWidget {
                             ).only(bottom: 10),
                             Texts.regular(
                               text: "Elige un recuerdo y descubre",
-                              fontSize: 6.sp,
+                              fontSize: 10.sp,
                               alignment: TextAlign.center,
                               color: Palette.grey,
                             ),

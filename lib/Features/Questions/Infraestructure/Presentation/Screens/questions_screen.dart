@@ -43,26 +43,15 @@ class QuestionsScreen extends StatelessWidget {
                             color: Palette.pink,
                           ),
                         ),
-                        MemoryTitle(
+                        const MemoryTitle(
                           child: Texts.bold(
                             text: "Preguntas",
-                            fontSize: 10.sp,
                           ),
                         ),
-                        MemoryTitle(
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.vpn_key,
-                                color: Colors.yellow,
-                              ).only(right: 10),
-                              Texts.bold(
-                                text: "3",
-                                fontSize: 6.sp,
-                                alignment: TextAlign.center,
-                                color: Palette.black,
-                              ),
-                            ],
+                        const MemoryTitle(
+                          child: Icon(
+                            Icons.lock,
+                            color: Palette.kPrimary,
                           ),
                         ),
                       ],
@@ -70,114 +59,127 @@ class QuestionsScreen extends StatelessWidget {
                       horizontal: 5.w,
                       vertical: 2.h,
                     ),
-                    MemoryTitle(
-                      child: Texts.bold(
-                        text: state.questions[state.index].question,
-                        fontSize: 6.sp,
-                        alignment: TextAlign.center,
-                        color: Palette.black,
-                      ),
-                    ).only(bottom: 5.h),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: 4,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              context.read<QuestionsBloc>().add(
-                                    QuestionEventSetSelected(index),
+                    if (state.questions.isNotEmpty)
+                      Expanded(
+                        child: Column(
+                          children: [
+                            MemoryTitle(
+                              child: Texts.bold(
+                                text: state.questions[state.index].question,
+                                fontSize: 6.sp,
+                                alignment: TextAlign.center,
+                                color: Palette.black,
+                              ),
+                            ).only(bottom: 5.h),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: 4,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      context.read<QuestionsBloc>().add(
+                                            QuestionEventSetSelected(index),
+                                          );
+                                    },
+                                    child: MemoryTitle(
+                                      color: state.isSelected == null
+                                          ? null
+                                          : state.isSelected == index
+                                              ? Palette.kPrimary
+                                              : null,
+                                      padding: 10,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          MemoryTitle(
+                                            color: Palette.white,
+                                            padding: 10,
+                                            child: Texts.bold(
+                                              text: (index + 1).toString(),
+                                              fontSize: 6.sp,
+                                              alignment: TextAlign.center,
+                                              color: Palette.black,
+                                            ),
+                                          ),
+                                          Texts.bold(
+                                            text: state.questions[state.index].responses[index],
+                                            fontSize: 6.sp,
+                                            alignment: TextAlign.center,
+                                            color: state.isSelected == null
+                                                ? Palette.black
+                                                : state.isSelected == index
+                                                    ? Palette.white
+                                                    : Palette.black,
+                                          ),
+                                          const SizedBox.shrink(),
+                                        ],
+                                      ),
+                                    ).symmetric(vertical: 1.h, horizontal: 10.w),
                                   );
-                            },
-                            child: MemoryTitle(
-                              color: state.isSelected == null
-                                  ? null
-                                  : state.isSelected == index
-                                      ? Palette.kPrimary
-                                      : null,
-                              padding: 10,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  MemoryTitle(
-                                    color: Palette.white,
-                                    padding: 10,
-                                    child: Texts.bold(
-                                      text: (index + 1).toString(),
-                                      fontSize: 6.sp,
-                                      alignment: TextAlign.center,
-                                      color: Palette.black,
-                                    ),
-                                  ),
-                                  Texts.bold(
-                                    text: state.questions[state.index].responses[index],
-                                    fontSize: 6.sp,
-                                    alignment: TextAlign.center,
-                                    color: state.isSelected == null
-                                        ? Palette.black
-                                        : state.isSelected == index
-                                            ? Palette.white
-                                            : Palette.black,
-                                  ),
-                                  const SizedBox.shrink(),
-                                ],
+                                },
                               ),
-                            ).symmetric(vertical: 1.h, horizontal: 10.w),
-                          );
-                        },
-                      ),
-                    ),
-                    CustomButton(
-                      onTap: () {
-                        if (state.questions[state.index].correct != state.isSelected) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      Image.asset(
-                                        "${assetImage}triste.png",
-                                        width: 40.w,
-                                      ),
-                                      Texts.bold(
-                                        text: "Incorrecto",
-                                        fontSize: 8.sp,
-                                        color: Palette.black,
-                                      ).only(bottom: 2.h),
-                                      CustomButton(
-                                        child: Texts.regular(
-                                          text: "Aceptar",
-                                          fontSize: 8.sp,
+                            ),
+                            CustomButton(
+                              onTap: () {
+                                if (state.questions[state.index].correct != state.isSelected) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                "${assetImage}triste.png",
+                                                width: 40.w,
+                                              ),
+                                              Texts.bold(
+                                                text: "Incorrecto",
+                                                fontSize: 8.sp,
+                                                color: Palette.black,
+                                              ).only(bottom: 2.h),
+                                              CustomButton(
+                                                child: Texts.regular(
+                                                  text: "Aceptar",
+                                                  fontSize: 8.sp,
+                                                ),
+                                                onTap: () {
+                                                  GoRouter.of(context).pop();
+                                                  context.go("/home");
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        onTap: () {
-                                          GoRouter.of(context).pop();
-                                          context.go("/home");
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                          return;
-                        }
+                                      );
+                                    },
+                                  );
+                                  return;
+                                }
 
-                        context.read<QuestionsBloc>().add(
-                              QuestionEventCheckQuestion(
-                                state.questions[state.index].id,
-                                userId,
+                                context.read<QuestionsBloc>().add(
+                                      QuestionEventCheckQuestion(
+                                        state.questions[state.index].id,
+                                        userId,
+                                      ),
+                                    );
+                              },
+                              child: Texts.bold(
+                                text: "Confirmar",
+                                fontSize: 6.sp,
+                                alignment: TextAlign.center,
+                                color: Palette.white,
                               ),
-                            );
-                      },
-                      child: Texts.bold(
-                        text: "Confirmar",
-                        fontSize: 6.sp,
-                        alignment: TextAlign.center,
-                        color: Palette.white,
+                            ).symmetric(vertical: 4.h, horizontal: 10.w),
+                          ],
+                        ),
                       ),
-                    ).symmetric(vertical: 4.h, horizontal: 10.w),
+                    if (state.questions.isEmpty)
+                      const Expanded(
+                        child: Center(
+                          child: Texts.bold(text: "No hay preguntas"),
+                        ),
+                      ),
                   ],
                 ),
               )),

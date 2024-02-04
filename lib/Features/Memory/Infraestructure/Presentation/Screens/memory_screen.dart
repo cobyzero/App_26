@@ -4,7 +4,7 @@ import 'package:app_26/Core/Static/colors.dart';
 import 'package:app_26/Core/Static/texts.dart';
 import 'package:app_26/Core/Util/util.dart';
 import 'package:app_26/Features/Home/Domain/Entities/memory_entity.dart';
-import 'package:app_26/Features/Memory/Application/bloc/memory_bloc.dart';
+import 'package:app_26/Features/Memory/Application/Blocs/memory_bloc/memory_bloc.dart';
 import 'package:app_26/Features/Memory/Infraestructure/Presentation/Widgets/memory_title.dart';
 import 'package:easy_padding/easy_padding.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -47,13 +47,11 @@ class MemoryScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Texts.bold(
+                          const Texts.bold(
                             text: "Recuerdo: ",
-                            fontSize: 8.sp,
                           ),
                           Texts.bold(
                             text: "${entity.date.day}/${entity.date.month}/${entity.date.year}",
-                            fontSize: 8.sp,
                             color: Palette.pink,
                           ),
                         ],
@@ -82,23 +80,24 @@ class MemoryScreen extends StatelessWidget {
                               );
                         },
                         child: MemoryTitle(
-                          child: SizedBox(
+                          child: Container(
                             width: double.infinity,
+                            alignment: state.isOpen ? Alignment.topLeft : Alignment.center,
                             child: AnimatedSizeAndFade(
-                                fadeDuration: const Duration(milliseconds: 300),
-                                sizeDuration: const Duration(milliseconds: 600),
-                                child: state.isOpen
-                                    ? Texts.regular(
-                                        alignment: TextAlign.start,
-                                        text: entity.message,
-                                        fontSize: 6.sp,
-                                        color: Palette.black,
-                                        height: 2,
-                                      )
-                                    : Image.asset(
-                                        "${assetImage}love-and-romance.png",
-                                        height: 20.h,
-                                      )),
+                              fadeDuration: const Duration(milliseconds: 300),
+                              sizeDuration: const Duration(milliseconds: 600),
+                              child: state.isOpen
+                                  ? Texts.regular(
+                                      alignment: TextAlign.start,
+                                      text: entity.message,
+                                      color: Palette.black,
+                                      height: 2,
+                                    )
+                                  : Image.asset(
+                                      "${assetImage}love-and-romance.png",
+                                      height: 20.h,
+                                    ),
+                            ),
                           ),
                         ),
                       );
@@ -148,7 +147,7 @@ class MemoryScreen extends StatelessWidget {
   Future<String> getImage() async {
     final storageRef = FirebaseStorage.instance.ref();
 
-    final imageUrl = await storageRef.child(entity.image).getDownloadURL();
+    final imageUrl = await storageRef.child("${entity.userId}/${entity.image}").getDownloadURL();
     return imageUrl;
   }
 }

@@ -59,7 +59,6 @@ class HomeMemoryItem extends StatelessWidget {
             )
           : Texts.bold(
               text: (index + 1).toString(),
-              fontSize: 6.sp,
               color: Palette.white,
             ),
     );
