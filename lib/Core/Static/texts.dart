@@ -80,12 +80,12 @@ class Texts extends StatelessWidget {
       child: Text(
         text,
         textAlign: alignment,
-        style: (style ?? GoogleFonts.inter()).copyWith(
+        style: (style ?? GoogleFonts.josefinSans()).copyWith(
           color: color,
           fontSize: fontSize ?? 12.sp,
           height: height,
           fontWeight: fontWeight,
-          fontFamily: "Inter",
+          fontFamily: "JosefinSans",
           decoration: underline ? TextDecoration.underline : TextDecoration.none,
         ),
         maxLines: maxLines,

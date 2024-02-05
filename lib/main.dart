@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
             title: 'Material App',
             routerConfig: goRouter,
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(fontFamily: "Inter"),
+            theme: ThemeData(fontFamily: "JosefinSans"),
           );
         },
       ),

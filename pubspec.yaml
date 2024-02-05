@@ -88,9 +88,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Inter
+    - family: JosefinSans
       fonts:
-        - asset: assets/fonts/Inter-Regular.ttf 
+        - asset: assets/fonts/JosefinSans-Regular.ttf 
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
