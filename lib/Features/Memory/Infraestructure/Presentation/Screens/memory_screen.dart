@@ -7,7 +7,6 @@ import 'package:app_26/Features/Home/Domain/Entities/memory_entity.dart';
 import 'package:app_26/Features/Memory/Application/Blocs/memory_bloc/memory_bloc.dart';
 import 'package:app_26/Features/Memory/Infraestructure/Presentation/Widgets/memory_title.dart';
 import 'package:easy_padding/easy_padding.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +39,7 @@ class MemoryScreen extends StatelessWidget {
                         onPressed: () {
                           context.go("/home");
                         },
-                        color: Palette.pink,
+                        color: Palette.kPrimary,
                       ),
                     ),
                     MemoryTitle(
@@ -52,7 +51,7 @@ class MemoryScreen extends StatelessWidget {
                           ),
                           Texts.bold(
                             text: "${entity.date.day}/${entity.date.month}/${entity.date.year}",
-                            color: Palette.pink,
+                            color: Palette.kPrimary,
                           ),
                         ],
                       ),
@@ -113,7 +112,7 @@ class MemoryScreen extends StatelessWidget {
                   child: AspectRatio(
                       aspectRatio: 1,
                       child: FutureBuilder(
-                        future: getImage(),
+                        future: Util.getImage(entity.userId, entity.image),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return Container(
@@ -143,21 +142,4 @@ class MemoryScreen extends StatelessWidget {
       ),
     );
   }
-
-  Future<String> getImage() async {
-    final storageRef = FirebaseStorage.instance.ref();
-
-    final imageUrl = await storageRef.child("${entity.userId}/${entity.image}").getDownloadURL();
-    return imageUrl;
-  }
 }
-
-  // final ImagePicker picker = ImagePicker();
-  //                   final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-  //                   if (image == null) return;
-  //                   final metadata = SettableMetadata(contentType: "image/jpeg");
-
-  //                   final storageRef = FirebaseStorage.instance.ref();
-  //                   final uploadTask = storageRef.child("mountains.jpg").putFile(File(image.path), metadata);
-
-  //                   print(await storageRef.getDownloadURL());

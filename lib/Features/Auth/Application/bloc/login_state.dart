@@ -16,15 +16,9 @@ final class LoginInitial extends LoginState {
 }
 
 final class LoginComplete extends LoginState {
-  final Stream<UserEntity> user;
+  final String userId;
 
-  LoginComplete({required this.user});
-
-  copyWith({Stream<UserEntity>? user}) {
-    return LoginComplete(
-      user: user ?? this.user,
-    );
-  }
+  LoginComplete({required this.userId});
 }
 
 final class LoginError extends LoginState {

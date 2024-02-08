@@ -12,6 +12,10 @@ import 'package:app_26/Features/Questions/Application/IRepositories/questions_re
 import 'package:app_26/Features/Questions/Application/Services/questions_service.dart';
 import 'package:app_26/Features/Questions/Domain/Repositories/questions_repository.dart';
 import 'package:app_26/Features/Splash/Application/bloc/splash_bloc.dart';
+import 'package:app_26/Features/User/Application/Repositories/user_repository.dart';
+import 'package:app_26/Features/User/Application/Services/user_service.dart';
+import 'package:app_26/Features/User/Application/bloc/user_bloc.dart';
+import 'package:app_26/Features/User/Domain/Repositories/user_repository.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.asNewInstance();
@@ -29,6 +33,9 @@ Future<void> initDependencies() async {
   );
   getIt.registerLazySingleton<MemoryService>(
     () => MemoryService(),
+  );
+  getIt.registerLazySingleton<UserService>(
+    () => UserService(),
   );
   //REPOSITORIES
   getIt.registerLazySingleton<AuthRepository>(
@@ -51,6 +58,11 @@ Future<void> initDependencies() async {
       getIt.get<MemoryService>(),
     ),
   );
+  getIt.registerLazySingleton<UserRepository>(
+    () => IUserRepository(
+      getIt.get<UserService>(),
+    ),
+  );
   //BLOCS
   getIt.registerLazySingleton<SplashBloc>(
     () => SplashBloc(),
@@ -58,6 +70,11 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton<MemoryCreateBloc>(
     () => MemoryCreateBloc(
       getIt.get<MemoryRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<UserBloc>(
+    () => UserBloc(
+      getIt.get<UserRepository>(),
     ),
   );
 }

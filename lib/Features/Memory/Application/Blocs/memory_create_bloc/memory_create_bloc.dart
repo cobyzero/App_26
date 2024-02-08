@@ -9,7 +9,10 @@ part 'memory_create_state.dart';
 class MemoryCreateBloc extends Bloc<MemoryCreateEvent, MemoryCreateState> {
   final MemoryRepository repository;
 
-  MemoryCreateBloc(this.repository) : super(MemoryCreateInitial()) {
+  MemoryCreateBloc(this.repository)
+      : super(MemoryCreateInitial(
+          date: DateTime.now(),
+        )) {
     on<MemoryCreateSetImage>((event, emit) {
       final nState = (state as MemoryCreateInitial);
 
@@ -32,7 +35,7 @@ class MemoryCreateBloc extends Bloc<MemoryCreateEvent, MemoryCreateState> {
       final nState = (state as MemoryCreateInitial);
 
       final entity = MemoryCreateEntity(
-        date: nState.date!.toIso8601String(),
+        date: nState.date.toIso8601String(),
         isBlocked: nState.isBlocked,
         message: event.message,
         image: nState.image!,
@@ -48,7 +51,9 @@ class MemoryCreateBloc extends Bloc<MemoryCreateEvent, MemoryCreateState> {
     });
 
     on<MemoryCreateClean>((event, emit) {
-      emit(MemoryCreateInitial());
+      emit(MemoryCreateInitial(
+        date: DateTime.now(),
+      ));
     });
   }
 }

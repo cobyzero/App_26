@@ -13,7 +13,7 @@ class IQuestionRepository extends QuestionRepository {
     try {
       return data.docs.map((e) => QuestionEntity.fromJson(e.data())).toList();
     } catch (e) {
-      throw Exception("No se pudo mapear questions");
+      throw "No se pudo mapear questions";
     }
   }
 

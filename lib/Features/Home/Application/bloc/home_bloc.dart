@@ -22,7 +22,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<HomeEventUnlockMemory>((event, emit) async {
       try {
-        await repository.unlockMemory(event.userId, event.keys, event.memoryId);
+        final nState = (state as HomeComplete);
+
+        emit(nState.copyWith(indexLoading: event.index));
+
+        await repository.unlockMemory(event.userId, event.keys, event.memoryId).whenComplete(
+              () => emit(
+                nState.copyWith(indexLoading: null),
+              ),
+            );
       } catch (e) {
         emit(HomeError(error: e.toString()));
       }

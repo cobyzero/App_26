@@ -7,10 +7,10 @@ final class MemoryCreateInitial extends MemoryCreateState {
   final String? image;
   final String? pathImage;
   final bool isBlocked;
-  final DateTime? date;
+  final DateTime date;
   MemoryCreateInitial({
     this.image,
-    this.date,
+    required this.date,
     this.isBlocked = false,
     this.pathImage,
   });

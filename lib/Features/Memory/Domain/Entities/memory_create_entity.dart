@@ -36,11 +36,12 @@ class MemoryCreateEntity {
         userId: json["userId"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson({String id = ""}) => {
         "date": date,
         "image": image,
         "isBlocked": isBlocked,
         "message": message,
         "userId": userId,
+        "id": id,
       };
 }

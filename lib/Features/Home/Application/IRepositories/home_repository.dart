@@ -12,17 +12,20 @@ class IHomeRepository extends HomeRepository {
     try {
       return data.map(
         (event) {
-          return event.docs.map(
+          final a = event.docs.map(
             (e) {
               return MemoryEntity.fromJson(
                 e.data(),
               );
             },
           );
+          a.toList().sort((a, b) => a.date.compareTo(b.date));
+
+          return a;
         },
       );
     } catch (e) {
-      throw Exception("Error al mapear memorys");
+      throw "Error al mapear memorys";
     }
   }
 

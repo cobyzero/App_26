@@ -1,4 +1,3 @@
-import 'package:app_26/Features/Auth/Domain/Entities/user_entity.dart';
 import 'package:app_26/Features/Auth/Domain/Repositories/auth_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -14,11 +13,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginInitial(isEmpty: event.isEmpty));
     });
 
-    on<LoginEventLogin>((event, emit) {
+    on<LoginEventLogin>((event, emit) async {
       try {
-        final user = repository.login(event.key);
+        final userId = await repository.login(event.key);
+
         emit(
-          LoginComplete(user: user),
+          LoginComplete(userId: userId),
         );
       } catch (e) {
         emit(

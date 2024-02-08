@@ -1,13 +1,12 @@
 import 'package:app_26/Core/Static/assets.dart';
 import 'package:app_26/Core/Static/colors.dart';
-import 'package:app_26/Core/Static/const.dart';
 import 'package:app_26/Core/Static/texts.dart';
 import 'package:app_26/Core/Util/util.dart';
 import 'package:app_26/Core/Widgets/custom_button.dart';
 import 'package:app_26/Core/Widgets/custom_input.dart';
 import 'package:app_26/Features/Auth/Application/bloc/login_bloc.dart';
+import 'package:app_26/Features/User/Application/bloc/user_bloc.dart';
 import 'package:easy_padding/easy_padding.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -24,17 +23,16 @@ class LoginScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is LoginComplete) {
           GoRouter.of(context).pop();
-
-          state.user.first.then((value) {
-            if (value.rol == Rol.admin.index) {
-              context.go("/homeAdmin");
-            } else if (value.rol == Rol.user.index) {
-              context.go("/home");
-            }
-          });
+          context.read<UserBloc>().add(UserEventGetUser(state.userId));
+          context.go("/home");
         } else if (state is LoginError) {
           GoRouter.of(context).pop();
-          Util.showMessage(state.error, context);
+          Util.showError(
+            text: state.error,
+            context: context,
+            onConfirm: () {},
+          );
+
           keyController.text = "";
           context.read<LoginBloc>().add(
                 LoginEventSetEmpty(isEmpty: true),
@@ -50,28 +48,26 @@ class LoginScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.center,
             child: SingleChildScrollView(
-              dragStartBehavior: DragStartBehavior.down,
               child: Column(
                 children: [
                   SizedBox(
-                    height: 30.h,
+                    height: 17.h,
                   ),
                   Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                    ),
                     width: double.infinity,
-                    padding: EdgeInsets.all(15.w),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
+                    padding: EdgeInsets.all(8.w),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40),
                       color: Palette.white,
                     ),
                     child: Form(
                       key: formKey,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
                             width: 30.w,
@@ -101,8 +97,7 @@ class LoginScreen extends StatelessWidget {
                             hintText: "Key",
                           ).only(bottom: 6.h),
                           CustomButton(
-                            child: Texts.regular(
-                              padding: EdgeInsets.symmetric(horizontal: 23.w),
+                            child: const Texts.regular(
                               text: "Ingresar",
                               color: Palette.white,
                             ),
@@ -117,6 +112,9 @@ class LoginScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 17.h,
                   ),
                 ],
               ),

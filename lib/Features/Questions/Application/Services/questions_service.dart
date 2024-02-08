@@ -8,7 +8,7 @@ class QuestionService {
     try {
       return await firebase.collection("Questions").where("userId", isEqualTo: userId).get();
     } catch (e) {
-      throw Exception("No se pudo obtener las preguntas");
+      throw "No se pudo obtener las preguntas";
     }
   }
 
@@ -24,7 +24,7 @@ class QuestionService {
         "keys": user.keys + 1,
       });
     } catch (e) {
-      throw Exception("No se pudo obtener las preguntas");
+      throw "No se pudo obtener las preguntas";
     }
   }
 }

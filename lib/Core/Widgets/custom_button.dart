@@ -17,7 +17,7 @@ class CustomButton extends StatelessWidget {
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
         fixedSize: Size(
-          double.infinity,
+          100.w,
           6.h,
         ),
         backgroundColor: Palette.kPrimary,

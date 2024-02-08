@@ -4,6 +4,7 @@ import 'package:app_26/Core/Util/util.dart';
 import 'package:app_26/Features/Auth/Domain/Entities/user_entity.dart';
 import 'package:app_26/Features/Home/Application/bloc/home_bloc.dart';
 import 'package:app_26/Features/Home/Domain/Entities/memory_entity.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -15,52 +16,127 @@ class HomeMemoryItem extends StatelessWidget {
     required this.index,
     required this.memory,
     required this.user,
+    required this.isLoading,
   });
   final int index;
   final MemoryEntity memory;
   final UserEntity user;
+  final bool isLoading;
+
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: () {
-        if (memory.isBlocked) {
-          if (user.keys == 0) {
-            Util.showMessage("No cuentas con llaves suficientes", context);
-            return;
+    return Container(
+      decoration: BoxDecoration(
+        color: Palette.kPrimary,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: FutureBuilder(
+        future: Util.getImage(user.id, memory.image),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                      colorFilter: memory.isBlocked
+                          ? const ColorFilter.mode(
+                              Palette.grey2,
+                              BlendMode.color,
+                            )
+                          : null,
+                      image: CachedNetworkImageProvider(snapshot.data!),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                memory.isBlocked
+                    ? Visibility(
+                        visible: !isLoading,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (user.keys == 0) {
+                              Util.showError(
+                                text: 'No cuentas con llaves suficientes',
+                                context: context,
+                                onConfirm: () {},
+                              );
+
+                              return;
+                            }
+
+                            context.read<HomeBloc>().add(
+                                  HomeEventUnlockMemory(
+                                    memory.id,
+                                    index: index,
+                                    userId: user.id,
+                                    keys: user.keys,
+                                  ),
+                                );
+                          },
+                          child: Icon(
+                            Icons.lock,
+                            color: Palette.white,
+                            size: 40.sp,
+                            shadows: const [
+                              BoxShadow(
+                                color: Palette.kPrimary,
+                                offset: Offset.zero,
+                                blurRadius: 10,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Visibility(
+                        visible: !isLoading,
+                        child: GestureDetector(
+                          onTap: () => context.go("/memory", extra: memory),
+                          child: Container(
+                            height: 4.h,
+                            margin: EdgeInsets.symmetric(horizontal: 5.w),
+                            decoration: BoxDecoration(
+                              color: Palette.kPrimary.withOpacity(.8),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Texts.regular(
+                                  text: "Ver",
+                                  color: Palette.white,
+                                ),
+                                Icon(
+                                  Icons.arrow_right,
+                                  size: 20.sp,
+                                  color: Palette.white,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                Visibility(
+                  visible: isLoading,
+                  child: SizedBox(
+                    width: 13.w,
+                    height: 6.h,
+                    child: const CircularProgressIndicator(
+                      strokeWidth: 8,
+                      color: Palette.kPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            );
           }
 
-          context.read<HomeBloc>().add(
-                HomeEventUnlockMemory(
-                  memory.id,
-                  userId: user.id,
-                  keys: user.keys,
-                ),
-              );
-          return;
-        }
-        context.go("/memory", extra: memory);
-      },
-      style: FilledButton.styleFrom(
-        shape: const CircleBorder(
-          side: BorderSide(
-            width: 4,
-            color: Palette.grey,
-          ),
-        ),
-        elevation: 20,
-        shadowColor: Palette.kPrimary,
-        backgroundColor: Palette.kPrimary,
+          return Util.loadingWidget(color: Palette.white);
+        },
       ),
-      child: memory.isBlocked
-          ? Icon(
-              Icons.lock,
-              color: Colors.white,
-              size: 16.sp,
-            )
-          : Texts.bold(
-              text: (index + 1).toString(),
-              color: Palette.white,
-            ),
     );
   }
 }

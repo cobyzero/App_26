@@ -9,6 +9,7 @@ import 'package:app_26/Core/Widgets/custom_date_picker.dart';
 import 'package:app_26/Core/Widgets/custom_dropdown.dart';
 import 'package:app_26/Core/Widgets/custom_input.dart';
 import 'package:app_26/Core/Widgets/custom_input_field.dart';
+import 'package:app_26/Features/Auth/Domain/Entities/user_entity.dart';
 import 'package:app_26/Features/Memory/Application/Blocs/memory_create_bloc/memory_create_bloc.dart';
 import 'package:app_26/Features/Memory/Infraestructure/Presentation/Widgets/memory_title.dart';
 import 'package:easy_padding/easy_padding.dart';
@@ -20,27 +21,38 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 
 class MemoryCreateScreen extends StatelessWidget {
-  MemoryCreateScreen({super.key});
+  MemoryCreateScreen({super.key, required this.userEntity});
   final messageController = TextEditingController();
   final keyUserController = TextEditingController();
+  final UserEntity userEntity;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<MemoryCreateBloc, MemoryCreateState>(
       listener: (context, state) {
         if (state is MemoryCreateComplete) {
-          Util.showMessage("Creado exitosamente", context);
-          context.go("/homeAdmin");
+          Util.showSucces(
+            text: 'Creado exitosamente',
+            context: context,
+            onConfirm: () {},
+          );
+
+          context.go("/home");
           context.read<MemoryCreateBloc>().add(
                 MemoryCreateClean(),
               );
         }
         if (state is MemoryCreateError) {
-          Util.showMessage(state.error, context);
-          context.go("/homeAdmin");
-          context.read<MemoryCreateBloc>().add(
-                MemoryCreateClean(),
-              );
+          Util.showError(
+            text: state.error,
+            context: context,
+            onConfirm: () {
+              context.go("/home");
+              context.read<MemoryCreateBloc>().add(
+                    MemoryCreateClean(),
+                  );
+            },
+          );
         }
       },
       child: Scaffold(
@@ -48,30 +60,37 @@ class MemoryCreateScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MemoryTitle(
-                      padding: 0,
-                      child: BackButton(
+                MemoryTitle(
+                  padding: 3.w,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BackButton(
                         onPressed: () {
-                          context.go("/homeAdmin");
+                          context.go("/home");
                         },
                       ),
-                    ),
-                    const MemoryTitle(
-                      child: Texts.bold(
+                      const Texts.bold(
                         text: "Crea una memoria",
+                      ).only(right: 2.w),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.vpn_key,
+                            color: Palette.grey3,
+                            size: 20.sp,
+                          ),
+                          Texts.bold(
+                            text: userEntity.keys.toString(),
+                            alignment: TextAlign.center,
+                            color: Palette.kPrimary,
+                            fontSize: 17.sp,
+                          ),
+                        ],
                       ),
-                    ),
-                    const MemoryTitle(
-                      padding: 0,
-                      child: IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.lock),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ).symmetric(vertical: 4.h),
                 CustomInputField(
                   controller: messageController,
@@ -156,7 +175,7 @@ class MemoryCreateScreen extends StatelessWidget {
                           ).only(right: 4.w),
                           Expanded(
                             child: CustomDatePicker(
-                              date: state.date ?? DateTime.now(),
+                              date: state.date,
                               onPress: (p0) {
                                 context.read<MemoryCreateBloc>().add(
                                       MemoryCreateSetDate(p0 ?? DateTime.now()),
@@ -174,7 +193,8 @@ class MemoryCreateScreen extends StatelessWidget {
                 CustomButton(
                   child: const SizedBox(
                     width: double.infinity,
-                    child: Center(
+                    child: Align(
+                      alignment: Alignment.center,
                       child: Texts.bold(
                         text: "Confirmar",
                         color: Palette.white,
@@ -184,29 +204,53 @@ class MemoryCreateScreen extends StatelessWidget {
                   onTap: () {
                     final state = (context.read<MemoryCreateBloc>().state as MemoryCreateInitial);
 
-                    if (state.date == null) {
-                      Util.showMessage("Ingrese una fecha", context);
-                      return;
-                    }
                     if (state.image == null || state.pathImage == null) {
-                      Util.showMessage("Ingrese una imagen", context);
+                      Util.showInfo(
+                        text: 'Ingrese una imagen',
+                        context: context,
+                        onConfirm: () {},
+                      );
                       return;
                     }
                     if (messageController.text.isEmpty) {
-                      Util.showMessage("Ingrese un mensaje", context);
+                      Util.showInfo(
+                        text: 'Ingrese un mensaje',
+                        context: context,
+                        onConfirm: () {},
+                      );
+
                       return;
                     }
                     if (keyUserController.text.isEmpty) {
-                      Util.showMessage("Ingrese la key del usuario", context);
+                      Util.showInfo(
+                        text: 'Ingrese la key del usuario',
+                        context: context,
+                        onConfirm: () {},
+                      );
+
                       return;
                     }
+                    Util.showInfo(
+                      text: 'Se te cobrara 1 key',
+                      context: context,
+                      onConfirm: () {
+                        if (userEntity.keys == 0) {
+                          Util.showError(
+                            text: "No cuentas con keys suficientes",
+                            context: context,
+                            onConfirm: () {},
+                          );
+                          return;
+                        }
 
-                    context.read<MemoryCreateBloc>().add(
-                          MemoryCreateCreate(
-                            keyUserController.text,
-                            messageController.text,
-                          ),
-                        );
+                        context.read<MemoryCreateBloc>().add(
+                              MemoryCreateCreate(
+                                keyUserController.text,
+                                messageController.text,
+                              ),
+                            );
+                      },
+                    );
                   },
                 ).symmetric(vertical: 4.h),
               ],

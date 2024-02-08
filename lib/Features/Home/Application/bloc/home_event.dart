@@ -13,9 +13,12 @@ class HomeEventUnlockMemory extends HomeEvent {
   final String userId;
   final int keys;
   final String memoryId;
+  final int index;
+
   HomeEventUnlockMemory(
     this.memoryId, {
     required this.userId,
     required this.keys,
+    required this.index,
   });
 }

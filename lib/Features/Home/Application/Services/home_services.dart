@@ -12,7 +12,7 @@ class HomeServices {
           )
           .snapshots();
     } catch (e) {
-      throw Exception("Error al obtener memorys");
+      throw "Error al obtener memorys";
     }
   }
 
@@ -26,7 +26,7 @@ class HomeServices {
         "isBlocked": false,
       });
     } catch (e) {
-      throw Exception("Error al desbloquear memoria");
+      throw "Error al desbloquear memoria";
     }
   }
 }

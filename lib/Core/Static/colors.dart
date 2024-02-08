@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Palette {
-  static const kPrimary = pink;
+  static const kPrimary = Color(0xFF2594EE);
   static const pink = Color(0xffFF5069);
   static const white = Color(0xffFFffff);
   static const black = Color(0xff000000);

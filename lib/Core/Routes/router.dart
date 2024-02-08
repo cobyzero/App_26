@@ -1,6 +1,6 @@
+import 'package:app_26/Features/Auth/Domain/Entities/user_entity.dart';
 import 'package:app_26/Features/Auth/Infraestructure/Presentation/Screens/login_screen.dart';
 import 'package:app_26/Features/Home/Domain/Entities/memory_entity.dart';
-import 'package:app_26/Features/Home/Infraestructure/Presentation/Screens/home_admin_screen.dart';
 import 'package:app_26/Features/Home/Infraestructure/Presentation/Screens/home_screen.dart';
 import 'package:app_26/Features/Memory/Infraestructure/Presentation/Screens/memory_create_screen.dart';
 import 'package:app_26/Features/Memory/Infraestructure/Presentation/Screens/memory_screen.dart';
@@ -36,12 +36,10 @@ final goRouter = GoRouter(
       ),
     ),
     GoRoute(
-      path: "/homeAdmin",
-      builder: (context, state) => const HomeAdminScreen(),
-    ),
-    GoRoute(
       path: "/memoryCreate",
-      builder: (context, state) => MemoryCreateScreen(),
+      builder: (context, state) => MemoryCreateScreen(
+        userEntity: state.extra as UserEntity,
+      ),
     ),
   ],
 );

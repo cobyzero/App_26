@@ -3,11 +3,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AuthService {
   final firebase = FirebaseFirestore.instance;
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> login(String key) {
+  Future<QuerySnapshot<Map<String, dynamic>>> login(String key) async {
     try {
-      return firebase.collection("Users").where("key", isEqualTo: key).snapshots();
+      return await firebase
+          .collection("Users")
+          .where(
+            "key",
+            isEqualTo: key,
+          )
+          .get();
     } catch (e) {
-      throw Exception("No se encontro la key");
+      throw "No se encontro la key";
     }
   }
 }
