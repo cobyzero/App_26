@@ -43,9 +43,13 @@ class LoginScreen extends StatelessWidget {
         body: SafeArea(
           child: Container(
             decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("${assetImage}background.jpg"),
-                fit: BoxFit.cover,
+              gradient: LinearGradient(
+                colors: [
+                  Palette.kPrimary,
+                  Colors.white,
+                ],
+                end: Alignment.bottomCenter,
+                begin: Alignment.topCenter,
               ),
             ),
             alignment: Alignment.center,

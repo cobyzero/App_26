@@ -1,24 +1,23 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic",
-    "dart.lineLength": 110,
-    "[dart]": {
-      "editor.rulers": [110]
-    },
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
-    },
-    "dart.flutterSdkPath": ".fvm/flutter_sdk",
-    //Eliminar archivos .fvm de búsqueda
-    "search.exclude": {
-        "**/.fvm": true
-    },
-    // Eliminar de la observación de archivos
-    "files.watcherExclude": {
-        "**/.fvm": true
-    },
-    "cSpell.words": [
-      "hersheys"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "dart.lineLength": 110,
+  "[dart]": {
+    "editor.rulers": [
+      110
     ]
-  }
-  
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "dart.flutterSdkPath": ".fvm\\versions\\3.16.5",
+  "search.exclude": {
+    "**/.fvm": true
+  },
+  "files.watcherExclude": {
+    "**/.fvm": true
+  },
+  "cSpell.words": [
+    "hersheys"
+  ]
+}
