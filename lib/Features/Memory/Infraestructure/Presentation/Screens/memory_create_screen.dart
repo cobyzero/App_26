@@ -167,7 +167,9 @@ class MemoryCreateScreen extends StatelessWidget {
                         height: 10.h,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: state.pathImage.length + 1,
+                          itemCount: state.pathImage.length < 5
+                              ? state.pathImage.length + 1
+                              : state.pathImage.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () async {
