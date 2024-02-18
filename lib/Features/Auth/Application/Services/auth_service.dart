@@ -22,7 +22,7 @@ class AuthService {
       if (user.docs.firstOrNull == null) {
         final nUser = UserEntity(
             name: credentials.user!.displayName!,
-            keys: 2,
+            keys: 5,
             id: credentials.user!.uid,
             key: credentials.user!.uid.substring(0, 5));
 
