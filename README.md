@@ -1,16 +1,17 @@
-# app_26
+# 26 Recuerdos
 
-A new Flutter project.
+Proyecto creado para compartir recuerdos.
 
-## Getting Started
+## Caracteristicas principales
 
-This project is a starting point for a Flutter application.
+* Bloc
+* Firebase
+* Arquitectura Hexagonal
 
-A few resources to get you started if this is your first Flutter project:
+## Imagenes
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<image src="https://imgur.com/DJTTEWl.png" width=150>
+<image src="https://imgur.com/0FnzCkG.png" width=150>
+<image src="https://imgur.com/cGBwkp5.png" width=150>
+<image src="https://imgur.com/jAkNXu3.png" width=150>
+<image src="https://imgur.com/NDmDBII.png" width=150> 
