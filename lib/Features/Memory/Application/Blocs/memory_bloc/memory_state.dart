@@ -1,12 +1,22 @@
 part of 'memory_bloc.dart';
 
-@immutable
 class MemoryState {
   final bool isOpen;
+  final List<String> images;
 
-  const MemoryState({required this.isOpen});
-}
+  const MemoryState({
+    this.isOpen = false,
+    this.images = const [],
+  });
 
-final class MemoryInitial extends MemoryState {
-  const MemoryInitial({required super.isOpen});
+  copyWith({
+    List<String>? images,
+    bool? isOpen,
+    bool? isLoaded,
+  }) {
+    return MemoryState(
+      images: images ?? this.images,
+      isOpen: isOpen ?? this.isOpen,
+    );
+  }
 }

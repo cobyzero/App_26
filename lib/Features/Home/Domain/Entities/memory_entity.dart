@@ -1,10 +1,11 @@
 class MemoryEntity {
   final String message;
-  final String image;
+  final List<String> image;
   final String userId;
   final bool isBlocked;
   final DateTime date;
   final String id;
+  final String nameUser;
 
   MemoryEntity({
     required this.message,
@@ -13,15 +14,17 @@ class MemoryEntity {
     required this.isBlocked,
     required this.date,
     required this.id,
+    required this.nameUser,
   });
 
   MemoryEntity copyWith({
     String? message,
-    String? image,
+    List<String>? image,
     String? userId,
     bool? isBlocked,
     DateTime? date,
     String? id,
+    String? nameUser,
   }) =>
       MemoryEntity(
         message: message ?? this.message,
@@ -30,15 +33,17 @@ class MemoryEntity {
         isBlocked: isBlocked ?? this.isBlocked,
         date: date ?? this.date,
         id: id ?? this.id,
+        nameUser: nameUser ?? this.nameUser,
       );
 
   factory MemoryEntity.fromJson(Map<String, dynamic> json) => MemoryEntity(
         message: json["message"],
-        image: json["image"],
+        image: List<String>.from(json["image"].map((x) => x)),
         userId: json["userId"],
         isBlocked: json["isBlocked"],
         date: DateTime.parse(json["date"]),
         id: json["id"],
+        nameUser: json["nameUser"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,5 +53,6 @@ class MemoryEntity {
         "isBlocked": isBlocked,
         "date": date,
         "id": id,
+        "nameUser": nameUser,
       };
 }

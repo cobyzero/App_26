@@ -38,7 +38,7 @@ class QuestionsScreen extends StatelessWidget {
                           padding: 10,
                           child: BackButton(
                             onPressed: () {
-                              context.go("/home");
+                              context.go("/main");
                             },
                             color: Palette.pink,
                           ),
@@ -145,7 +145,7 @@ class QuestionsScreen extends StatelessWidget {
                                                 ),
                                                 onTap: () {
                                                   GoRouter.of(context).pop();
-                                                  context.go("/home");
+                                                  context.go("/main");
                                                 },
                                               ),
                                             ],

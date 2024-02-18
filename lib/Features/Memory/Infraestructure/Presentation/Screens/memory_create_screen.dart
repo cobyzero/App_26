@@ -11,7 +11,6 @@ import 'package:app_26/Core/Widgets/custom_input.dart';
 import 'package:app_26/Core/Widgets/custom_input_field.dart';
 import 'package:app_26/Features/Auth/Domain/Entities/user_entity.dart';
 import 'package:app_26/Features/Memory/Application/Blocs/memory_create_bloc/memory_create_bloc.dart';
-import 'package:app_26/Features/Memory/Infraestructure/Presentation/Widgets/memory_title.dart';
 import 'package:easy_padding/easy_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,14 +21,24 @@ import 'package:sizer/sizer.dart';
 
 class MemoryCreateScreen extends StatelessWidget {
   MemoryCreateScreen({super.key, required this.userEntity});
-  final messageController = TextEditingController();
-  final keyUserController = TextEditingController();
+
   final UserEntity userEntity;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<MemoryCreateBloc, MemoryCreateState>(
       listener: (context, state) {
+        if (state is MemoryCreateInitial) {
+          if (state.isKeyValided != null) {
+            if (state.isKeyValided == false) {
+              Util.showError(
+                text: 'Key del usuario no existe',
+                context: context,
+                onConfirm: () {},
+              );
+            }
+          }
+        }
         if (state is MemoryCreateComplete) {
           Util.showSucces(
             text: 'Creado exitosamente',
@@ -37,7 +46,7 @@ class MemoryCreateScreen extends StatelessWidget {
             onConfirm: () {},
           );
 
-          context.go("/home");
+          context.go("/main");
           context.read<MemoryCreateBloc>().add(
                 MemoryCreateClean(),
               );
@@ -47,7 +56,7 @@ class MemoryCreateScreen extends StatelessWidget {
             text: state.error,
             context: context,
             onConfirm: () {
-              context.go("/home");
+              context.go("/main");
               context.read<MemoryCreateBloc>().add(
                     MemoryCreateClean(),
                   );
@@ -57,93 +66,152 @@ class MemoryCreateScreen extends StatelessWidget {
       },
       child: Scaffold(
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                MemoryTitle(
-                  padding: 3.w,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: BlocBuilder<MemoryCreateBloc, MemoryCreateState>(
+            builder: (context, state) {
+              if (state is MemoryCreateInitial) {
+                return SingleChildScrollView(
+                  child: Column(
                     children: [
-                      BackButton(
-                        onPressed: () {
-                          context.go("/home");
-                        },
-                      ),
-                      const Texts.bold(
-                        text: "Crea una memoria",
-                      ).only(right: 2.w),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                            Icons.vpn_key,
-                            color: Palette.grey3,
-                            size: 20.sp,
+                          BackButton(
+                            onPressed: () {
+                              context.go("/main");
+                            },
                           ),
-                          Texts.bold(
-                            text: userEntity.keys.toString(),
-                            alignment: TextAlign.center,
-                            color: Palette.kPrimary,
-                            fontSize: 17.sp,
+                          const Texts.bold(
+                            text: "Crea una memoria",
+                          ).only(right: 2.w),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.vpn_key,
+                                color: Palette.grey3,
+                                size: 20.sp,
+                              ).only(right: 2.w),
+                              Texts.bold(
+                                text: userEntity.keys.toString(),
+                                alignment: TextAlign.center,
+                                color: Palette.kPrimary,
+                                fontSize: 17.sp,
+                              ),
+                            ],
                           ),
                         ],
-                      ),
-                    ],
-                  ),
-                ).symmetric(vertical: 4.h),
-                CustomInputField(
-                  controller: messageController,
-                  hintText: "Mensaje",
-                ).only(bottom: 4.h),
-                CustomInput(
-                  controller: keyUserController,
-                  hintText: "Key del usuario",
-                ).only(bottom: 4.h),
-                GestureDetector(
-                  onTap: () async {
-                    final image = await getImageCropper();
+                      ).symmetric(vertical: 4.h),
+                      CustomInputField(
+                        controller: state.messageController,
+                        hintText: "Hola como estas",
+                        title: 'Mensaje',
+                      ).only(bottom: 4.h),
+                      CustomInput(
+                        title: "Usuario a enviar",
+                        readOnly: (state.isKeyValided ?? false),
+                        controller: state.keyUserController,
+                        prefixIcon: (state.isKeyValided ?? false)
+                            ? IconButton(
+                                onPressed: () {
+                                  context.read<MemoryCreateBloc>().add(
+                                        MemoryCreateCleanKeyValidate(),
+                                      );
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  size: 17.sp,
+                                ),
+                                color: Palette.red,
+                              )
+                            : null,
+                        hintText: "Codigo del usuario",
+                        suffixIcon: state.loadingKey
+                            ? Padding(
+                                padding: EdgeInsets.all(2.w),
+                                child: const CircularProgressIndicator(
+                                  color: Palette.white,
+                                ),
+                              )
+                            : IconButton(
+                                onPressed: () {
+                                  if ((state.isKeyValided ?? false) == true) return;
+                                  if (state.keyUserController.text.isEmpty) {
+                                    Util.showError(
+                                      context: context,
+                                      text: "Ingrese una key",
+                                      onConfirm: () {},
+                                    );
+                                    return;
+                                  }
 
-                    if (image == null) return;
-                    // ignore: use_build_context_synchronously
-                    context.read<MemoryCreateBloc>().add(
-                          MemoryCreateSetImage(image[0], image[1]),
-                        );
-                  },
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: BlocBuilder<MemoryCreateBloc, MemoryCreateState>(
-                      builder: (context, state) {
-                        if (state is MemoryCreateInitial) {
-                          return Container(
-                            padding: EdgeInsets.all(1.w),
-                            decoration: BoxDecoration(
-                              color: Palette.filled,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: state.pathImage == null
-                                ? Icon(
-                                    Icons.photo,
-                                    size: 30.sp,
-                                  )
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Image.file(
-                                      File(state.pathImage!),
-                                      fit: BoxFit.fill,
-                                    ),
+                                  context.read<MemoryCreateBloc>().add(
+                                        MemoryCreateValidateKey(
+                                          state.keyUserController.text,
+                                        ),
+                                      );
+                                },
+                                icon: Icon(
+                                  (state.isKeyValided ?? false) ? Icons.verified : Icons.search,
+                                  size: 17.sp,
+                                ),
+                                color: Palette.white,
+                              ).only(right: 2.w),
+                      ).only(bottom: 4.h),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(vertical: 2.h),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: Util.gradient(),
+                        ),
+                        height: 10.h,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.pathImage.length + 1,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () async {
+                                if (index != state.pathImage.length) {
+                                  await showImage(
+                                    context,
+                                    state.pathImage[index],
+                                  );
+                                  return;
+                                }
+
+                                final image = await getImageCropper();
+
+                                if (image == null) return;
+                                // ignore: use_build_context_synchronously
+                                context.read<MemoryCreateBloc>().add(
+                                      MemoryCreateSetImage(image[0], image[1]),
+                                    );
+                              },
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                  ),
-                ).only(bottom: 4.h),
-                BlocBuilder<MemoryCreateBloc, MemoryCreateState>(
-                  builder: (context, state) {
-                    if (state is MemoryCreateInitial) {
-                      return Row(
+                                  child: state.pathImage.length <= index
+                                      ? Icon(
+                                          Icons.add_photo_alternate,
+                                          size: 30.sp,
+                                        )
+                                      : ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: Image.file(
+                                            File(state.pathImage[index]),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                ),
+                              ).symmetric(horizontal: 3.w),
+                            );
+                          },
+                        ),
+                      ).only(bottom: 4.h),
+                      Row(
                         children: [
                           const Texts.bold(
                             text: "Bloqueado",
@@ -160,15 +228,8 @@ class MemoryCreateScreen extends StatelessWidget {
                             ),
                           ),
                         ],
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ).only(bottom: 4.h),
-                BlocBuilder<MemoryCreateBloc, MemoryCreateState>(
-                  builder: (context, state) {
-                    if (state is MemoryCreateInitial) {
-                      return Row(
+                      ).only(bottom: 4.h),
+                      Row(
                         children: [
                           const Texts.bold(
                             text: "Fecha de la memoria",
@@ -184,80 +245,110 @@ class MemoryCreateScreen extends StatelessWidget {
                             ),
                           ),
                         ],
-                      );
-                    }
-
-                    return const SizedBox.shrink();
-                  },
-                ),
-                CustomButton(
-                  child: const SizedBox(
-                    width: double.infinity,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Texts.bold(
-                        text: "Confirmar",
-                        color: Palette.white,
                       ),
-                    ),
-                  ),
-                  onTap: () {
-                    final state = (context.read<MemoryCreateBloc>().state as MemoryCreateInitial);
+                      CustomButton(
+                        child: const SizedBox(
+                          width: double.infinity,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Texts.bold(
+                              text: "Confirmar",
+                              color: Palette.white,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          final state = (context.read<MemoryCreateBloc>().state as MemoryCreateInitial);
 
-                    if (state.image == null || state.pathImage == null) {
-                      Util.showInfo(
-                        text: 'Ingrese una imagen',
-                        context: context,
-                        onConfirm: () {},
-                      );
-                      return;
-                    }
-                    if (messageController.text.isEmpty) {
-                      Util.showInfo(
-                        text: 'Ingrese un mensaje',
-                        context: context,
-                        onConfirm: () {},
-                      );
-
-                      return;
-                    }
-                    if (keyUserController.text.isEmpty) {
-                      Util.showInfo(
-                        text: 'Ingrese la key del usuario',
-                        context: context,
-                        onConfirm: () {},
-                      );
-
-                      return;
-                    }
-                    Util.showInfo(
-                      text: 'Se te cobrara 1 key',
-                      context: context,
-                      onConfirm: () {
-                        if (userEntity.keys == 0) {
-                          Util.showError(
-                            text: "No cuentas con keys suficientes",
-                            context: context,
-                            onConfirm: () {},
-                          );
-                          return;
-                        }
-
-                        context.read<MemoryCreateBloc>().add(
-                              MemoryCreateCreate(
-                                keyUserController.text,
-                                messageController.text,
-                              ),
+                          if (state.image.isEmpty || state.pathImage.isEmpty) {
+                            Util.showInfo(
+                              text: 'Ingrese una imagen',
+                              context: context,
+                              onConfirm: () {},
                             );
-                      },
-                    );
-                  },
-                ).symmetric(vertical: 4.h),
-              ],
-            ).symmetric(horizontal: 10.w),
+                            return;
+                          }
+                          if (state.messageController.text.isEmpty) {
+                            Util.showInfo(
+                              text: 'Ingrese un mensaje',
+                              context: context,
+                              onConfirm: () {},
+                            );
+
+                            return;
+                          }
+                          if (state.keyUserController.text.isEmpty) {
+                            Util.showInfo(
+                              text: 'Ingrese la key del usuario',
+                              context: context,
+                              onConfirm: () {},
+                            );
+
+                            return;
+                          }
+                          if (!(state.isKeyValided ?? false)) {
+                            Util.showInfo(
+                              text: 'Valide la key del usuario',
+                              context: context,
+                              onConfirm: () {},
+                            );
+
+                            return;
+                          }
+                          Util.showInfo(
+                            text: 'Se te cobrara 1 key',
+                            context: context,
+                            onConfirm: () {
+                              if (userEntity.keys == 0) {
+                                Util.showError(
+                                  text: "No cuentas con keys suficientes",
+                                  context: context,
+                                  onConfirm: () {},
+                                );
+                                return;
+                              }
+
+                              context.read<MemoryCreateBloc>().add(
+                                    MemoryCreateCreate(
+                                      state.keyUserController.text,
+                                      state.messageController.text,
+                                      userEntity.name,
+                                    ),
+                                  );
+                            },
+                          );
+                        },
+                      ).symmetric(vertical: 4.h),
+                    ],
+                  ).symmetric(horizontal: 10.w),
+                );
+              }
+
+              return Util.loadingWidget();
+            },
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> showImage(BuildContext context, String path) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          content: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.file(
+              File(path),
+              width: 80.w,
+              height: 80.w,
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      },
     );
   }
 

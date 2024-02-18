@@ -11,7 +11,7 @@ class IUserRepository extends UserRepository {
     final data = service.getUser(userId);
 
     return data.map(
-      (event) => UserEntity.fromJson(event.data()!),
+      (event) => UserEntity.fromJson(event.docs.first.data()),
     );
   }
 }

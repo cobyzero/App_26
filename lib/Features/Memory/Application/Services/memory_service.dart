@@ -3,47 +3,75 @@ import 'dart:io';
 import 'package:app_26/Features/Auth/Domain/Entities/user_entity.dart';
 import 'package:app_26/Features/Memory/Domain/Entities/memory_create_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class MemoryService {
   final firebase = FirebaseFirestore.instance;
   final storage = FirebaseStorage.instance;
 
-  Future<void> createMemory(MemoryCreateEntity entity, String pathImage) async {
-    final user = await firebase
-        .collection("Users")
-        .where(
-          "key",
-          isEqualTo: entity.userId,
-        )
-        .get();
-
-    if (user.docs.isEmpty) {
-      throw "El usuario no existe";
-    }
-    final userModel = UserEntity.fromJson(user.docs.first.data());
-
+  Future<void> createMemory(MemoryCreateEntity entity, String key) async {
     try {
-      entity = entity.copyWith(userId: user.docs.first.id);
+      final id = FirebaseAuth.instance.currentUser!.uid;
+      final userMain = await firebase
+          .collection("Users")
+          .where(
+            "id",
+            isEqualTo: id,
+          )
+          .get();
 
-      final storageRef = storage.ref().child("${entity.userId}/${entity.image}");
+      final user = await firebase
+          .collection("Users")
+          .where(
+            "key",
+            isEqualTo: key,
+          )
+          .get();
 
-      File imageFile = File(pathImage);
-      storageRef.putFile(imageFile).whenComplete(
-        () async {
-          await firebase.collection("Users").doc(entity.userId).update(
-            {"keys": userModel.keys - 1},
-          );
+      final userModel = UserEntity.fromJson(user.docs.first.data());
 
-          final memory = await firebase.collection("Memorys").add(entity.toJson());
+      final userModelMain = UserEntity.fromJson(userMain.docs.first.data());
 
-          await firebase.collection("Memorys").doc(memory.id).update(
-            {"id": memory.id},
-          );
-        },
+      entity = entity.copyWith(userId: userModel.id);
+
+      for (var i = 0; i < entity.image.length; i++) {
+        final storageRef = storage.ref().child("${entity.userId}/${entity.image[i]}");
+
+        File imageFile = File(entity.pathImage[i]);
+        await storageRef.putFile(imageFile);
+      }
+
+      await firebase.collection("Users").doc(userMain.docs.first.id).update(
+        {"keys": userModelMain.keys - 1},
+      );
+
+      final memory = await firebase.collection("Memorys").add(entity.toJson());
+
+      await firebase.collection("Memorys").doc(memory.id).update(
+        {"id": memory.id},
       );
     } catch (e) {
-      throw "Error al crear memoria";
+      throw "Error al crear recuerdo";
+    }
+  }
+
+  Future<bool?> validateKey(String key) async {
+    try {
+      final user = await firebase
+          .collection("Users")
+          .where(
+            "key",
+            isEqualTo: key,
+          )
+          .get();
+
+      if (user.docs.isNotEmpty) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw "Error al validar key";
     }
   }
 }

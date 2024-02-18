@@ -8,10 +8,20 @@ class IMemoryRepository extends MemoryRepository {
   IMemoryRepository(this.service);
 
   @override
-  Future<void> createMemory(
-    MemoryCreateEntity entity,
-    String pathImage,
-  ) async {
-    await service.createMemory(entity, pathImage);
+  Future<void> createMemory(MemoryCreateEntity entity, String key) async {
+    try {
+      service.createMemory(entity, key);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool?> validatedKey(String key) async {
+    try {
+      return await service.validateKey(key);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

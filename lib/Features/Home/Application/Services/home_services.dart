@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeServices {
   final firebase = FirebaseFirestore.instance;
@@ -16,9 +17,12 @@ class HomeServices {
     }
   }
 
-  Future<void> unlockMemory(String userId, int keys, String memoryId) async {
+  Future<void> unlockMemory(int keys, String memoryId) async {
     try {
-      await firebase.collection("Users").doc(userId).update({
+      final id = FirebaseAuth.instance.currentUser!.uid;
+      final user = await firebase.collection("Users").where("id", isEqualTo: id).get();
+
+      await firebase.collection("Users").doc(user.docs.first.id).update({
         "keys": keys - 1,
       });
 

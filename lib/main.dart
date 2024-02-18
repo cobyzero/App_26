@@ -8,11 +8,16 @@ import 'package:app_26/firebase_options.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -44,10 +49,10 @@ class MyApp extends StatelessWidget {
       child: Sizer(
         builder: (context, orientation, deviceType) {
           return MaterialApp.router(
-            title: 'Material App',
+            title: '26 Recuerdos',
             routerConfig: goRouter,
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(fontFamily: "JosefinSans"),
+            theme: ThemeData(fontFamily: "SFPro"),
           );
         },
       ),

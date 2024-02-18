@@ -12,7 +12,20 @@
           "package_name": "com.cobyzero.app_26.app_26"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "4516014037-29v45vg5s5iot7k2a2b0q5kqffk30nge.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cobyzero.app_26.app_26",
+            "certificate_hash": "72169ab2fc2c62d1bea651e68b005086b4128497"
+          }
+        },
+        {
+          "client_id": "4516014037-0pcmej80l6mlpllik0g9viqai0011k1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBG8x1TFS6-lgiLYDUtRsygPEnDVVt784M"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4516014037-0pcmej80l6mlpllik0g9viqai0011k1i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "4516014037-do61st29njb2j9pgr8atl70oaso747ol.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cobyzero.app26.app26"
+              }
+            }
+          ]
         }
       }
     }

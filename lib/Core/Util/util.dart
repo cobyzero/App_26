@@ -128,4 +128,15 @@ class Util {
       },
     );
   }
+
+  static LinearGradient gradient() {
+    return const LinearGradient(
+      begin: Alignment.topRight,
+      end: Alignment.bottomLeft,
+      colors: [
+        Palette.gradient1,
+        Palette.gradient2,
+      ],
+    );
+  }
 }

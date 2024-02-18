@@ -24,7 +24,16 @@ class MemoryCreateSetDate extends MemoryCreateEvent {
 class MemoryCreateCreate extends MemoryCreateEvent {
   final String keyUser;
   final String message;
-  MemoryCreateCreate(this.keyUser, this.message);
+  final String nameUser;
+  MemoryCreateCreate(this.keyUser, this.message, this.nameUser);
 }
 
 class MemoryCreateClean extends MemoryCreateEvent {}
+
+class MemoryCreateValidateKey extends MemoryCreateEvent {
+  final String key;
+
+  MemoryCreateValidateKey(this.key);
+}
+
+class MemoryCreateCleanKeyValidate extends MemoryCreateEvent {}

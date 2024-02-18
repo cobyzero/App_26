@@ -1,6 +1,5 @@
 import 'package:app_26/Core/Static/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
 class Texts extends StatelessWidget {
@@ -80,14 +79,15 @@ class Texts extends StatelessWidget {
       child: Text(
         text,
         textAlign: alignment,
-        style: (style ?? GoogleFonts.josefinSans()).copyWith(
-          color: color,
-          fontSize: fontSize ?? 12.sp,
-          height: height,
-          fontWeight: fontWeight,
-          fontFamily: "JosefinSans",
-          decoration: underline ? TextDecoration.underline : TextDecoration.none,
-        ),
+        style: style ??
+            TextStyle(
+              color: color,
+              fontSize: fontSize ?? 12.sp,
+              height: height,
+              fontWeight: fontWeight,
+              fontFamily: "SFPro",
+              decoration: underline ? TextDecoration.underline : TextDecoration.none,
+            ),
         maxLines: maxLines,
         overflow: textOverflow,
         softWrap: true,

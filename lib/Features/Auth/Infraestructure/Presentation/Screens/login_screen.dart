@@ -2,20 +2,18 @@ import 'package:app_26/Core/Static/assets.dart';
 import 'package:app_26/Core/Static/colors.dart';
 import 'package:app_26/Core/Static/texts.dart';
 import 'package:app_26/Core/Util/util.dart';
-import 'package:app_26/Core/Widgets/custom_button.dart';
-import 'package:app_26/Core/Widgets/custom_input.dart';
 import 'package:app_26/Features/Auth/Application/bloc/login_bloc.dart';
 import 'package:app_26/Features/User/Application/bloc/user_bloc.dart';
 import 'package:easy_padding/easy_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sizer/sizer.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
-  final TextEditingController keyController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +22,7 @@ class LoginScreen extends StatelessWidget {
         if (state is LoginComplete) {
           GoRouter.of(context).pop();
           context.read<UserBloc>().add(UserEventGetUser(state.userId));
-          context.go("/home");
+          context.go("/main");
         } else if (state is LoginError) {
           GoRouter.of(context).pop();
           Util.showError(
@@ -33,96 +31,84 @@ class LoginScreen extends StatelessWidget {
             onConfirm: () {},
           );
 
-          keyController.text = "";
           context.read<LoginBloc>().add(
                 LoginEventSetEmpty(isEmpty: true),
               );
         }
       },
       child: Scaffold(
+        backgroundColor: const Color(0xffAAD1FD),
         body: SafeArea(
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Palette.kPrimary,
-                  Colors.white,
-                ],
-                end: Alignment.bottomCenter,
-                begin: Alignment.topCenter,
+          child: Column(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Image.asset(
+                  "${assetImage}person.jpg",
+                ),
               ),
-            ),
-            alignment: Alignment.center,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 17.h,
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                    ),
-                    width: double.infinity,
-                    padding: EdgeInsets.all(8.w),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: Palette.white,
-                    ),
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 30.w,
-                            height: 30.w,
-                            padding: const EdgeInsets.all(20),
-                            decoration: const BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: Offset.zero,
-                                  color: Palette.kPrimary,
-                                  blurRadius: 13,
-                                ),
-                              ],
-                              shape: BoxShape.circle,
-                              color: Palette.kPrimary,
-                            ),
-                            child: Image.asset(
-                              "${assetImage}love-and-romance.png",
-                            ),
-                          ).only(bottom: 8.h),
-                          const Texts.bold(
-                            text: "Ingrese su key",
-                          ).only(bottom: 6.h),
-                          CustomInput(
-                            validator: (p0) => p0!.isEmpty ? "Rellene el campo" : null,
-                            controller: keyController,
-                            hintText: "Key",
-                          ).only(bottom: 6.h),
-                          CustomButton(
-                            child: const Texts.regular(
-                              text: "Ingresar",
-                              color: Palette.white,
-                            ),
-                            onTap: () {
-                              if (!formKey.currentState!.validate()) return;
-                              Util.loading(context);
-                              context.read<LoginBloc>().add(
-                                    LoginEventLogin(key: keyController.text),
-                                  );
-                            },
-                          ),
-                        ],
+              Expanded(
+                flex: 2,
+                child: Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(
+                        40,
+                      ),
+                      topRight: Radius.circular(
+                        40,
                       ),
                     ),
+                    color: Palette.white,
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset.zero,
+                        color: Palette.grey2,
+                        blurRadius: 13,
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 17.h,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Texts.bold(
+                        text: "26 Recuerdos",
+                        fontSize: 20.sp,
+                      ).only(bottom: 3.h),
+                      Texts.bold(
+                        text: "Bienvenido(a) denuevo!",
+                        fontSize: 14.sp,
+                      ).only(bottom: 2.h),
+                      Texts.regular(
+                        text: "Ingresa y descubre momentos increibles",
+                        fontSize: 12.sp,
+                      ).only(bottom: 4.h),
+                      SignInButton(
+                        Buttons.Google,
+                        text: "Continuar con Google",
+                        onPressed: () async {
+                          final google = await GoogleSignIn().signIn();
+                          if (google == null) return;
+                          // ignore: use_build_context_synchronously
+                          Util.loading(context);
+                          // ignore: use_build_context_synchronously
+                          context.read<LoginBloc>().add(
+                                LoginEventLogin(google: google),
+                              );
+                        },
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 4.w,
+                          vertical: 1.h,
+                        ),
+                        shape: const StadiumBorder(),
+                        elevation: 10,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),

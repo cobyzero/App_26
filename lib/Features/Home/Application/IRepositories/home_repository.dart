@@ -31,6 +31,6 @@ class IHomeRepository extends HomeRepository {
 
   @override
   Future<void> unlockMemory(String userId, int keys, String memoryId) async {
-    await services.unlockMemory(userId, keys, memoryId);
+    await services.unlockMemory(keys, memoryId);
   }
 }

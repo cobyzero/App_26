@@ -8,10 +8,12 @@ class MemoryTitle extends StatelessWidget {
     required this.child,
     this.padding = 20,
     this.color,
+    this.borderColor,
   });
   final Widget child;
   final double padding;
   final Color? color;
+  final Color? borderColor;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,6 +22,10 @@ class MemoryTitle extends StatelessWidget {
       color: color ?? Palette.filled,
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.circular(40),
+        side: BorderSide(
+          width: 1,
+          color: borderColor == null ? Colors.transparent : borderColor!,
+        ),
       ),
       child: child.all(padding),
     );

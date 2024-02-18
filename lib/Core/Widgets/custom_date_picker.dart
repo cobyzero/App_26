@@ -33,11 +33,12 @@ class CustomDatePicker extends StatelessWidget {
         width: double.infinity,
         height: 6.h,
         decoration: BoxDecoration(
-          color: Palette.filled,
+          gradient: Util.gradient(),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Texts.regular(
           text: Util.formatDate(date),
+          color: Palette.white,
         ),
       ),
     );

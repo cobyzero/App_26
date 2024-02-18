@@ -10,7 +10,7 @@ class LoginEventSetEmpty extends LoginEvent {
 }
 
 class LoginEventLogin extends LoginEvent {
-  final String key;
+  final GoogleSignInAccount google;
 
-  LoginEventLogin({required this.key});
+  LoginEventLogin({required this.google});
 }
