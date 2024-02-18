@@ -4,8 +4,10 @@ import 'package:app_26/Core/Static/texts.dart';
 import 'package:app_26/Core/Widgets/custom_button.dart';
 import 'package:app_26/Features/Auth/Domain/Entities/user_entity.dart';
 import 'package:easy_padding/easy_padding.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -68,7 +70,10 @@ class ProfileScreen extends StatelessWidget {
               SizedBox(
                 width: 50.w,
                 child: CustomButton(
-                  onTap: () {
+                  onTap: () async {
+                    await FirebaseAuth.instance.signOut();
+                    await GoogleSignIn().signOut();
+                    // ignore: use_build_context_synchronously
                     context.go("/login");
                   },
                   child: const Texts.regular(
